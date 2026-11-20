@@ -5,10 +5,13 @@
 [![reward](https://make.fun/badge/gta6-trophy-rarity-forecast-01/vnz347/gta6-trophy-rarity-forecast/reward.svg)](https://make.fun/bounty/gta6-trophy-rarity-forecast-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-rarity-forecast-01)
 
 Forecasts every GTA VI PlayStation 5 trophy's earn rate on Exophase at the
-case's target, as five quantiles (5%, 25%, 50%, 75%, 95%) per trophy. A
-trophy's rate is a ratio — earners over players tracked — and the two sides
-move for different reasons in launch week, so the program forecasts them
-separately and divides, instead of extrapolating the rate itself.
+case's target, as five quantiles (5%, 25%, 50%, 75%, 95%) per trophy — all
+55 of them (1 platinum, 2 gold, 6 silver, 46 bronze). A trophy's rate is a
+ratio — earners over players tracked — and the two sides move for different
+reasons in launch week, so the program forecasts them separately and
+divides, instead of extrapolating the rate itself. Any per-trophy failure
+falls back to a persistence forecast for that trophy, so a run always
+writes a valid file.
 
 ## Run it
 
@@ -18,8 +21,12 @@ mkdir -p out && MAKEFUN_INPUT_DIR=input MAKEFUN_OUTPUT_DIR=out python3 main.py
 
 `main.py` (Python 3.13, standard library only, no network) reads every
 `*.in` case in the input directory and writes one `<id>.out` forecast per
-case to the output directory. The grader runs it as `python3 /bot/main.py`
-with `/input` and `/output`. It runs in well under a second per case and is
+case to the output directory. Point the input directory at the kit's
+`input/` (which holds the practice cases `p00.in` and `p01.in`) to try it
+locally; the grader runs it as `python3 /bot/main.py` with `/input` and
+`/output`. Each output is one JSON object, `{"trophies": [{"id", "q": [q05,
+q25, q50, q75, q95]}]}`, one row per trophy, five non-decreasing quantiles
+from 0 to 100. It runs in well under a second per case and is
 deterministic: the same case always writes the same bytes.
 
 ## How the forecast works
